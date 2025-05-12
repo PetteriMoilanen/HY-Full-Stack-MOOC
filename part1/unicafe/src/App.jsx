@@ -12,23 +12,31 @@ const App = () => {
   const [bad, setBad] = useState(0)
   const [total, setTotal] = useState(0)
   const [average, setAverage] = useState(0)
+  
+  const calculatePercentage = () => {
+    const total = good + neutral + bad
+    if (total === 0) {
+      return 0
+    }
+    return (good / total) * 100
+  }
 
   const addGood = () => {
     const updatedGood = good + 1
     setGood(updatedGood)
+    setAverage((updatedGood - bad)/(total+1))
     setTotal(total + 1)
-    setAverage((updatedGood - bad)/total)
   }
   const addNeutral = () => {
     setNeutral(neutral + 1)
+    setAverage((good - bad)/(total+1))
     setTotal(total + 1)
-    setAverage((good - bad)/total)
   }
   const addBad = () => {
     const updatedBad = bad + 1
     setBad(updatedBad)
+    setAverage((good - updatedBad)/(total+1))
     setTotal(total + 1)
-    setAverage((good - updatedBad)/total)
   }
 
   return (
@@ -43,7 +51,7 @@ const App = () => {
       <Statistic name="bad" count={bad} />
       <Statistic name="all" count={total} />
       <Statistic name="average" count={average} />
-
+      <Statistic name="positive" count={calculatePercentage() + " %"} />
     </div>
   )
 }
